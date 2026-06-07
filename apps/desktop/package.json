@@ -1,8 +1,8 @@
 {
-  "name": "desktop",
-  "productName": "desktop",
+  "name": "toshokan",
+  "productName": "Toshokan LM",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Toshokan LM is a library management tool designed to help users organize and manage their research sources effectively.",
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {
