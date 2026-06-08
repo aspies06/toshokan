@@ -4,7 +4,7 @@ import '../style/App.css';
 function App() {
   return (
     <div className="App">
-      <h1>Toshokan LM - Your Personal Library Manager</h1>
+      <h1>Toshokan LM - Your A.I. Personal Library Manager</h1>
       {/* Future UI components will go here */}
     </div>
   );
