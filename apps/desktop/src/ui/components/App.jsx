@@ -10,7 +10,7 @@ function App() {
       <h1>Toshokan LM - Your Personal A.I. Library Manager</h1>
       <Routes>
         <Route path="/" element={<Library />} />
-        <Route path="/collections" element={<Collection />} />
+        <Route path="/collections/:collectionId" element={<Collection />} />
       </Routes>
     </div>
   );
