@@ -1,0 +1,15 @@
+.tile {
+    margin-bottom: 1rem;
+}
+
+.tileImage {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
