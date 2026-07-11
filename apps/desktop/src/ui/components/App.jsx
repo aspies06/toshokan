@@ -1,17 +1,20 @@
 import React from 'react';
 import { Routes, Route } from 'react-router';
-import '../style/App.css';
 import Collection from './Collection.jsx';
 import Library from './Library.jsx';
+import logo from '../assets/banner_logo.svg';
+import '../style/App.css';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Toshokan LM - Your Personal A.I. Library Manager</h1>
-      <Routes>
-        <Route path="/" element={<Library />} />
-        <Route path="/collections/:collectionId" element={<Collection />} />
-      </Routes>
+    <div className="app-container">
+      <img src={logo} alt="Logo" className="logo" />
+      <div>
+        <Routes>
+          <Route path="/" element={<Library />} />
+          <Route path="/collections/:collectionId" element={<Collection />} />
+        </Routes>
+      </div>
     </div>
   );
 }

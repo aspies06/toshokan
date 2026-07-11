@@ -1,8 +1,48 @@
-body {
-  font-family:
-    -Roboto, 'Segoe UI', Helvetica, Arial,
-    sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+/* apps/desktop/src/ui/style/App.css */
+
+:root {
+  --primary-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --max-width: 40rem;
+  --spacing-base: 1rem;
+  --line-height: 1.6;
 }
+
+body {
+  font-family: var(--primary-font);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: var(--spacing-base);
+  line-height: var(--line-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Container to constrain width while allowing centered layout */
+.app-container {
+  max-width: var(--max-width);
+  width: 100%;
+  text-align: left; 
+}
+
+.logo {
+  width: 500px;
+  height: auto;
+  max-width: 100%; /* Ensures responsiveness on smaller screens */
+  margin-bottom: calc(var(--spacing-base) * 2);
+  display: inline-block;
+}
+
+/* Additional spacing for headers/paragraphs if needed */
+h1, h2, h3 {
+  margin-bottom: var(--spacing-base);
+}
+
+p {
+  margin-bottom: var(--spacing-base);
+}
+
