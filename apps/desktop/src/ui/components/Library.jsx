@@ -1,29 +1,16 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import Tile from './Tile';
 import '../style/Library.css';
 import defaultImg from '../assets/default_tile_img.png';
 
-// TODO: Placeholder data for collections
-const collections = [
-  {
-    id: 1,
-    title: "Collection 1",
-    description: "A collection of items related to category 1",
-  },
-  {
-    id: 2, 
-    title: "Collection 2",
-    description: "A collection of items related to category 2", 
-  },
-  {
-    id: 3,
-    title: "Collection 3",
-    description: "A collection of items related to category 3",
-  },
-];
-
 function Library() {
+  const [collections, setCollections] = useState([]);
+
+  useEffect(() => {
+    window.electronAPI.getCollections().then(setCollections)
+  }, []);
+
   return (
     <div>
       <ul>

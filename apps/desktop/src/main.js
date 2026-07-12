@@ -1,6 +1,10 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+const fs = require('fs').promises;
+
+const userDataPath = path.join(app.getPath('userData'), 'UserData');
+const collectionsPath = path.join(userDataPath, 'collections.json');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -14,6 +18,8 @@ const createWindow = () => {
     height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   });
 
@@ -28,11 +34,36 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
+async function ensureUserDataPath() {
+  try {
+    await fs.access(userDataPath);
+  } catch (error) {
+    await fs.mkdir(userDataPath, { recursive: true });
+  }
+}
+
+async function getCollections() {
+  await ensureUserDataPath();
+  try {
+    await fs.access(collectionsPath);
+    const raw = await fs.readFile(collectionsPath, 'utf-8');
+    const data = JSON.parse(raw);
+    return data.collections;
+  } catch (error) {
+    await fs.writeFile(collectionsPath, JSON.stringify({ collections: [] }));
+    return [];
+  }
+};
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
+
+  ipcMain.handle('get:collections', async () => {
+    return getCollections();
+  });
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
