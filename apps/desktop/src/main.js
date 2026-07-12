@@ -50,8 +50,11 @@ async function getCollections() {
     const data = JSON.parse(raw);
     return data.collections;
   } catch (error) {
-    await fs.writeFile(collectionsPath, JSON.stringify({ collections: [] }));
-    return [];
+    if (error.code === 'ENOENT') {
+      await fs.writeFile(collectionsPath, JSON.stringify({ collections: [] }));
+      return [];
+    }
+    throw error;
   }
 };
 
