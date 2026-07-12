@@ -65,7 +65,7 @@ app.whenReady().then(() => {
   createWindow();
 
   ipcMain.handle('get:collections', async () => {
-    return getCollections();
+    return await getCollections();
   });
 
   // On OS X it's common to re-create a window in the app when the
