@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Figure from 'react-bootstrap/Figure';
-import '../style/Tile.css';
 
 /**
  * The Tile component, which represents a single collection in the UI.
