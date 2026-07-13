@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-const fs = require('fs').promises;
+import { promises as fs } from 'node:fs';
 
 const userDataPath = path.join(app.getPath('userData'), 'UserData');
 const collectionsPath = path.join(userDataPath, 'collections.json');
@@ -34,6 +34,7 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
+// Ensure the user data path exists
 async function ensureUserDataPath() {
   try {
     await fs.access(userDataPath);
@@ -42,6 +43,7 @@ async function ensureUserDataPath() {
   }
 }
 
+// Fetch collections from the collections.json file
 async function getCollections() {
   await ensureUserDataPath();
   try {
@@ -85,6 +87,3 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.

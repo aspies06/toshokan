@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link, useParams } from 'react-router';
 
+/**
+ * The Collection component, which renders UI for a specific collection.
+ * @returns {JSX.Element} The collection details element.
+ */
 function Collection() {
   const { collectionId } = useParams();
   return (
