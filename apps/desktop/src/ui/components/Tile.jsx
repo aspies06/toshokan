@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Figure from 'react-bootstrap/Figure';
 import '../style/Tile.css';
 
 /**
@@ -14,12 +15,19 @@ import '../style/Tile.css';
 function Tile({ id,title, description, imageUrl })
 {
   return (
-    <div className="tile">
-      <Link to={`/collections/${id}`}>
-        <img src={imageUrl} alt={title} className="tileImage" />
-      </Link>
-      <div>{title}</div>
-    </div>
+    <Link to={`/collections/${id}`}>
+      <Figure>
+        <Figure.Image
+          width={64}
+          height={64}
+          alt={title}
+          src={imageUrl}>
+        </Figure.Image>
+        <Figure.Caption>
+          {title}
+        </Figure.Caption>
+      </Figure>
+    </Link>
   );
 }
 
