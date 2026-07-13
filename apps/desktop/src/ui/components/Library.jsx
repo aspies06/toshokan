@@ -34,18 +34,17 @@ function Library() {
           Unable to fetch collections: {error.message}
         </Alert>
       )}
-      <ul>
-        {collections.map((collection) => (
-          <li key={collection.id}>
+      <div className="grid">
+          {collections.map((collection) => (
             <Tile
               id={collection.id}
+              key={collection.id}
               title={collection.title}
               description={collection.description}
               imageUrl={collection.imageUrl || defaultImg}
             />
-          </li>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
