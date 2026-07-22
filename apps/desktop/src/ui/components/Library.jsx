@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Alert from 'react-bootstrap/Alert';
 import Tile from './Tile';
 import '../style/Library.css';
-import defaultImg from '../assets/collection.svg';
+import defaultImg from '../assets/collection_mixed.svg';
 
 /**
  * The Library component, which displays a list of collections fetched from the main process.
