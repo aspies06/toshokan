@@ -3,9 +3,10 @@ import { promises as fs } from 'node:fs';
 import { app } from 'electron';
 import { invokeScript } from './script.js';
 
+const appRoot = app.getAppPath();
 const userDataFolder = path.join(app.getPath('userData'), 'UserData');
 const collectionsPath = path.join(userDataFolder, 'collections.json');
-const scriptsFolder = path.join(__dirname, '../../../pipeline/src');
+const scriptsFolder = path.join(appRoot, 'src', 'pipeline');
 const processScript = path.join(scriptsFolder, 'process.py');
 
 /**

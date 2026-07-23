@@ -25,5 +25,4 @@
  *  });
  * ```
  */
-
-import './ui/main.jsx';
+import '../ui/main.jsx';
