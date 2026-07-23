@@ -2,7 +2,7 @@
   "name": "toshokan",
   "productName": "Toshokan LM",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Toshokan LM is a library management tool designed to help users organize and manage their research sources.",
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {
@@ -14,8 +14,8 @@
   },
   "keywords": [],
   "author": {
-    "name": "Brennan Spies",
-    "email": "brennanspies@gmail.com"
+    "name": "Aidan Spies",
+    "email": "spiesaidan@gmail.com"
   },
   "license": "MIT",
   "devDependencies": {
