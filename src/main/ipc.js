@@ -5,6 +5,7 @@ import { invokeScript } from './script.js';
 
 const appRoot = app.getAppPath();
 const userDataFolder = path.join(app.getPath('userData'), 'UserData');
+const sourcesFolder = path.join(userDataFolder, 'Sources');
 const collectionsPath = path.join(userDataFolder, 'collections.json');
 const scriptsFolder = path.join(appRoot, 'src', 'pipeline');
 const processScript = path.join(scriptsFolder, 'process.py');
@@ -30,6 +31,55 @@ async function ensureUserDataPath() {
 }
 
 /**
+ * Ensures that the user data folder exists, creating it if necessary.
+ */
+async function ensureSourcesPath() {
+  try {
+    await fs.access(sourcesFolder);
+  } catch (error) {
+    await fs.mkdir(sourcesFolder, { recursive: true });
+  }
+}
+
+/**
+ * Converts a URL string into a safe file name.
+ *
+ * @param {string} url - The URL to convert.
+ * @param {number} maxLength - Max allowed length (default: 255).
+ * @returns {string} Safe file name.
+ */
+function urlToFilename(url, maxLength = 255) {
+  if (!url) return 'file';
+
+  try {
+    // Decode URL-encoded characters (e.g., '%20' -> ' ')
+    const decodedUrl = decodeURIComponent(url);
+
+    // Strip protocol (http://, https://, ftp://, etc.)
+    let cleanUrl = decodedUrl.replace(/^[a-zA-Z]+:\/\//, '');
+
+    // Replace invalid/reserved filename characters with underscores
+    // Handles Windows (\ / : * ? " < > |) and POSIX (/) restrictions
+    let filename = cleanUrl.replace(/[\\/:"*?<>|]/g, '_');
+
+    // Clean up redundant consecutive underscores, leading/trailing dots and spaces
+    filename = filename
+      .replace(/_+/g, '_')
+      .replace(/^[\s._]+|[\s._]+$/g, '');
+
+    // Fallback if cleaning stripped everything
+    if (!filename) return 'file';
+
+    // Truncate to safe operating system length limit
+    return filename.slice(0, maxLength);
+  } catch (e) {
+    // Fallback in case decodeURIComponent fails on malformed URIs
+    return 'file';
+  }
+}
+
+
+/**
  * Fetches collections from the collections.json file.
  * @returns {Promise<Array>} A promise resolving to the list of collections.
  */
@@ -50,22 +100,37 @@ async function getCollections() {
 };
 
 /**
+ * Determines whether a string is a remote URL (not a Windows file path).
+ * @param {string} fileOrUrl The string to check.
+ * @returns {boolean} True if the string is a remote URL, False otherwise.
+ */
+function isRemoteUrl(fileOrUrl) {
+  if (!URL.canParse(fileOrUrl)) return false;
+  const { protocol } = new URL(fileOrUrl);
+  return ['https:', 'http:'].includes(protocol);
+}
+
+/**
  * Uploads content from a file or remote URL to the processing script.
  * @param {string} fileOrUrl The file path or URL to upload.
  * @returns {Promise<void>} A promise that resolves when the upload is complete.
  */
 async function uploadContent(fileOrUrl) {
-  let filePath = fileOrUrl;
-  if (URL.canParse(fileOrUrl)) {
-    const parsedUrl = new URL(fileOrUrl);
-    // if not file URL, process the remote URL directly
-    if (parsedUrl.protocol !== 'file:') {
-      await invokeScript(processScript, ['--url', fileOrUrl]);
-      return;
-    }
-    filePath = convertFileUrlToPath(parsedUrl);
+  await ensureSourcesPath();
+  if (isRemoteUrl(fileOrUrl)) {
+    return await invokeScript(processScript, 
+      ['--url', fileOrUrl, '--to', path.join(sourcesFolder, urlToFilename(fileOrUrl))]
+    );
   }
-  await invokeScript(processScript, ['--file', filePath]);
+
+  let filePath = fileOrUrl;
+  if (fileOrUrl.startsWith('file://')) {
+    filePath = convertFileUrlToPath(new URL(fileOrUrl));
+  }
+
+  return await invokeScript(processScript, 
+    ['--file', filePath, '--to', path.join(sourcesFolder, path.basename(filePath, path.extname(filePath)))]
+  );
 }
 
 export { getCollections, uploadContent };
