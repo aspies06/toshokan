@@ -6,9 +6,7 @@ from pathlib import Path
 def change_extension(file_name: str, new_extension: str) -> str:
     if not new_extension.startswith('.'):
         new_extension = f".{new_extension}"
-    
     path = Path(file_name)
-
     return str(path.with_suffix(new_extension))
 
 # Process the local file

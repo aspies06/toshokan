@@ -1,7 +1,8 @@
 import path from 'node:path';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import started from 'electron-squirrel-startup';
-import { getCollections, uploadContent } from './ipc.js';
+import { addCollection, getCollectionById, getCollections, getSources } from './db.js';
+import { uploadContent } from './ipc.js';
 
 const initWidth = 1200;
 const initHeight = 800;
@@ -40,9 +41,24 @@ const createWindow = () => {
 app.whenReady().then(() => {
   createWindow();
 
+  // Handle IPC event for adding a collection
+  ipcMain.handle('add:collection', async (event, collection) => {
+    return addCollection(collection.name, collection.description);
+  });
+  
   // Handle IPC event for fetching collections
   ipcMain.handle('get:collections', async () => {
-    return await getCollections();
+    return getCollections();
+  });
+
+  // Handle IPC event for fetching individual collection
+  ipcMain.handle('get:collection', async (event, collectionId) => {
+    return getCollectionById(collectionId);
+  });
+
+  // Handle IPC event for fetching sources (for collection)
+  ipcMain.handle('get:sources', async (event, collectionId) => {
+    return await getSources(collectionId);
   });
 
   // Handle IPC event for uploading content
@@ -67,6 +83,3 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.

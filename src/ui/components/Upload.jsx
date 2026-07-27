@@ -3,7 +3,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
-function Upload() {
+/**
+ * Modal component for uploading files or web resources
+ * @returns {JSX.Element} - The upload component
+ */
+function Upload() 
+{
   const [show, setShow] = useState(false);
   const [source, setSource] = useState(null);
 
@@ -37,8 +42,8 @@ function Upload() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Add Source
+      <Button variant="outline-primary" size="sm" onClick={handleShow}>
+        Add
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -46,7 +51,7 @@ function Upload() {
           <Modal.Title>Add Source</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Select a file to upload:</p>
+          <p>Select a file to upload</p>
           <Form.Control type="file" onChange={handleFileChange} />
         </Modal.Body>
         <Modal.Footer>

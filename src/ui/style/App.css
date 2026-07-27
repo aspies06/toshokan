@@ -28,6 +28,16 @@ body {
   margin-right: auto;
 }
 
+.app-container header {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.app-container main {
+  margin-top: 0; /* Remove any top margin */
+  flex: 1; /* Push content to fill available space */
+}
+
 .logo {
   width: 500px;
   height: auto;
