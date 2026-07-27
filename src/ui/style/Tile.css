@@ -1,0 +1,33 @@
+.tile-wrapper {
+  width: 100%;
+  max-width: 100px; /* Adjust based on your grid layout */
+}
+
+.tile-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+}
+
+.tile-figure {
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.tile-caption {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  min-height: 3em; /* Ensures consistent height */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines if desired */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tile-figure .figure-image {
+  margin: 0 auto;
+  display: block;
+}

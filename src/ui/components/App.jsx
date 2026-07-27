@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
+import { Link, Routes, Route } from 'react-router';
 import Collection from './Collection.jsx';
 import Library from './Library.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,16 +10,21 @@ import '../style/App.css';
  * The main App component that sets up routing for the application.
  * @returns {JSX.Element} The main application container with routing.
  */
-function App() {
+function App() 
+{
   return (
     <div className="app-container">
-      <img src={logo} alt="Logo" className="logo" />
-      <div>
+      <header>
+        <Link to="/">
+          <img src={logo} alt="Logo" className="logo" />
+        </Link>
+      </header>
+      <main>
         <Routes>
           <Route path="/" element={<Library />} />
           <Route path="/collections/:collectionId" element={<Collection />} />
         </Routes>
-      </div>
+      </main>
     </div>
   );
 }

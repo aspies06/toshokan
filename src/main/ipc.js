@@ -1,13 +1,9 @@
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
-import { app } from 'electron';
+import { appRoot, userDataFolder, sourcesFolder, scriptsFolder } from './files.js';
+import * as db from './db.js';
 import { invokeScript } from './script.js';
 
-const appRoot = app.getAppPath();
-const userDataFolder = path.join(app.getPath('userData'), 'UserData');
-const sourcesFolder = path.join(userDataFolder, 'Sources');
-const collectionsPath = path.join(userDataFolder, 'collections.json');
-const scriptsFolder = path.join(appRoot, 'src', 'pipeline');
 const processScript = path.join(scriptsFolder, 'process.py');
 
 /**
@@ -78,27 +74,6 @@ function urlToFilename(url, maxLength = 255) {
   }
 }
 
-
-/**
- * Fetches collections from the collections.json file.
- * @returns {Promise<Array>} A promise resolving to the list of collections.
- */
-async function getCollections() {
-  await ensureUserDataPath();
-  try {
-    await fs.access(collectionsPath);
-    const raw = await fs.readFile(collectionsPath, 'utf-8');
-    const data = JSON.parse(raw);
-    return data.collections;
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      await fs.writeFile(collectionsPath, JSON.stringify({ collections: [] }));
-      return [];
-    }
-    throw error;
-  }
-};
-
 /**
  * Determines whether a string is a remote URL (not a Windows file path).
  * @param {string} fileOrUrl The string to check.
@@ -133,4 +108,4 @@ async function uploadContent(fileOrUrl) {
   );
 }
 
-export { getCollections, uploadContent };
+export { uploadContent };
