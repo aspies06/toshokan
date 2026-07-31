@@ -13,13 +13,13 @@ import '../style/App.css';
 function App() 
 {
   return (
-    <div className="app-container">
+    <div className="app-container d-flex flex-column vh-100 p-3">
       <header>
         <Link to="/">
-          <img src={logo} alt="Logo" className="logo" />
+          <img src={logo} alt="Logo" className="logo mb-4" />
         </Link>
       </header>
-      <main>
+      <main className="d-flex flex-column flex-grow-1 overflow-auto">
         <Routes>
           <Route path="/" element={<Library />} />
           <Route path="/collections/:collectionId" element={<Collection />} />

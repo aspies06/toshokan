@@ -5,7 +5,6 @@
   --bg-color: #ffffff;
   --text-color: #1a1a1a;
   --max-width: 80rem;
-  --spacing-base: 1rem;
   --line-height: 1.6;
 }
 
@@ -14,7 +13,6 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   margin: 0;
-  padding: var(--spacing-base);
   line-height: var(--line-height);
   min-height: 100vh;
 }
@@ -26,32 +24,29 @@ body {
   text-align: left;
   margin-left: auto;
   margin-right: auto;
+  box-sizing: border-box; /* so vh-100 + p-3 padding don't overflow the viewport */
 }
 
-.app-container header {
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
+/* Flex children need an explicit min-height of 0 to shrink/scroll internally
+   instead of forcing the whole page (and .app-container's fixed vh-100) to
+   overflow. See App.jsx: main is a flex-grow-1 flex column. */
 .app-container main {
-  margin-top: 0; /* Remove any top margin */
-  flex: 1; /* Push content to fill available space */
+  min-height: 0;
 }
 
 .logo {
   width: 500px;
   height: auto;
   max-width: 100%; /* Ensures responsiveness on smaller screens */
-  margin-bottom: calc(var(--spacing-base) * 2);
   display: inline-block;
 }
 
 /* Additional spacing for headers/paragraphs if needed */
 h1, h2, h3 {
-  margin-bottom: var(--spacing-base);
+  margin-bottom: 1rem;
 }
 
 p {
-  margin-bottom: var(--spacing-base);
+  margin-bottom: 1rem;
 }
 

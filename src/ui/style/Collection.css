@@ -1,18 +1,14 @@
-/* Forces the container row to behave as a horizontal flex wrapper */
-.horizontal-row-wrapper {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  width: 100% !important;
+/* The 1.1rem value doesn't correspond to a Bootstrap fs-* step (fs-5=1.25rem,
+   fs-6=1rem); font-weight/line-height/margin are handled via Bootstrap's
+   fw-semibold/lh-base/mb-0 utilities directly in JSX. */
+.panel-title {
+  font-size: 1.1rem;
 }
 
-/* Defines the exact horizontal spacing split (3-6-3) */
-.panel-side {
-  flex: 0 0 25% !important;
-  max-width: 25% !important;
-}
-
-.panel-center {
-  flex: 0 0 50% !important;
-  max-width: 50% !important;
+/* Bootstrap has no min-height:0 utility. Flex children default to
+   min-height:auto, which prevents them from shrinking below their content
+   size and breaks internal scrolling (e.g. the Chat pane) inside a
+   fixed-height flex column. */
+.flex-fill-min-h0 {
+  min-height: 0;
 }
