@@ -1,5 +1,6 @@
 /* Common paths for the application */
 import path from 'node:path';
+import fsSync from 'node:fs';
 import { promises as fs } from 'node:fs';
 import { app } from 'electron';
 
@@ -8,6 +9,10 @@ const userDataFolder = path.join(app.getPath('userData'), 'UserData');
 const sourcesFolder = path.join(userDataFolder, 'Sources');
 const scriptsFolder = path.join(appRoot, 'src', 'pipeline');
 const dbPath = path.join(userDataFolder, 'libary.db');
+
+// Ensure the user data folder exists before anything (e.g. db.js) tries to
+// open a file within it, since DatabaseSync will not create missing directories.
+fsSync.mkdirSync(userDataFolder, { recursive: true });
 
 export { 
     appRoot, 

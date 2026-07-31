@@ -29,7 +29,7 @@ function NewCollection({onCollectionAdded})
 
     return (
         <>
-            <Button variant="outline-primary" size="sm" onClick={handleShow}>
+            <Button variant="outline-primary" className="align-self-start" size="sm" onClick={handleShow}>
                 Add Collection
             </Button>
             <Modal show={show} onHide={handleClose}>

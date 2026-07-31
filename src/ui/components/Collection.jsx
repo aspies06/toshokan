@@ -27,21 +27,21 @@ function Collection()
 
   return (
     <>
-      <Container fluid className="mt-4">
+      <Container fluid className="mt-2 d-flex flex-column flex-grow-1 flex-fill-min-h0">
         <div>
           <h2>{collection.name}</h2>
           <p className="text-muted">{collection.description}</p>
         </div>
-        <Row className="horizontal-row-wrapper">
-          <Col xs={12} md={3} className="panel-side bg-light p-3">
+        <Row className="flex-grow-1 flex-fill-min-h0">
+          <Col xs={12} md={3} className="bg-light p-3 d-flex flex-column">
             <Sources collectionId={id} />
           </Col>
-          <Col xs={12} md={6} className="panel-center p-3">
-            <h4>Chat</h4>
-            <Chat />
+          <Col xs={12} md={6} className="p-3 d-flex flex-column">
+            <h4 className="panel-title fw-semibold lh-base mb-0">Chat</h4>
+            <Chat collectionId={id} />
           </Col>
-          <Col xs={12} md={3} className="panel-side bg-light p-3">
-            <h4>Create</h4>
+          <Col xs={12} md={3} className="bg-light p-3 d-flex flex-column">
+            <h4 className="panel-title fw-semibold lh-base mb-0">Create</h4>
             <p>Right sidebar or widget content.</p>
           </Col>
         </Row>

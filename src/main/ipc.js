@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
-import { appRoot, userDataFolder, sourcesFolder, scriptsFolder } from './files.js';
+import { appRoot, sourcesFolder, scriptsFolder } from './files.js';
 import * as db from './db.js';
 import { invokeScript } from './script.js';
 
@@ -13,17 +13,6 @@ const processScript = path.join(scriptsFolder, 'process.py');
  */
 function convertFileUrlToPath(fileUrl) {
   return fileUrl.toString().replace('file://', '');
-}
-
-/**
- * Ensures that the user data folder exists, creating it if necessary.
- */
-async function ensureUserDataPath() {
-  try {
-    await fs.access(userDataFolder);
-  } catch (error) {
-    await fs.mkdir(userDataFolder, { recursive: true });
-  }
 }
 
 /**

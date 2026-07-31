@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import Alert from 'react-bootstrap/Alert';
 import Tile from './Tile';
 import NewCollection from './NewCollection';
-import '../style/Library.css';
 import defaultImg from '../assets/collection_mixed.svg';
 
 /**
@@ -43,7 +42,7 @@ function Library()
         </Alert>
       )}
       <NewCollection onCollectionAdded={fetchCollections} />
-      <div className="grid">
+      <div className="d-flex flex-wrap gap-4 w-100 mt-4">
           {collections.map((collection) => (
             <Tile
               id={collection.id}
