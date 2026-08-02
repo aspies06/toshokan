@@ -23,7 +23,7 @@ const ddl =
         author TEXT,
         source_type TEXT NOT NULL CHECK(source_type IN ('audio', 'video', 'text')),
         file_path TEXT, -- Local path to the original file on the desktop
-        is_active BOOLEAN NOT NULL DEFAULT 1, -- Allows user to toggle/de-select source in RAG query
+        file_hash TEXT, -- Hash of the original file
         create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE CASCADE
     );
@@ -47,7 +47,7 @@ const ddl =
 const selectCollections = 'SELECT id, name, description, image_url FROM collections ORDER BY update_time DESC';
 const selectCollection = 'SELECT id, name, description, image_url FROM collections WHERE id = ?';
 const insertCollection = 'INSERT INTO collections (name, description, image_url) VALUES (?, ?, ?)';
-const insertSource = 'INSERT INTO sources (collection_id, title, author, source_type, file_path, is_active) VALUES (?, ?, ?, ?, ?, ?)';
+const insertSource = 'INSERT INTO sources (collection_id, title, author, source_type, file_path) VALUES (?, ?, ?, ?, ?)';
 const selectSources = `SELECT 
             id, 
             collection_id, 
@@ -55,7 +55,6 @@ const selectSources = `SELECT
             author, 
             source_type, 
             file_path, 
-            is_active, 
             create_time 
         FROM sources 
         WHERE collection_id = ? 

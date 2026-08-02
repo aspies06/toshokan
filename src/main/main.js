@@ -62,8 +62,8 @@ app.whenReady().then(() => {
   });
 
   // Handle IPC event for uploading content
-  ipcMain.handle('upload:content', async (event, fileOrUrl) => {
-    return await uploadContent(fileOrUrl);
+  ipcMain.handle('upload:content', async (event, fileOrUrl, collectionId) => {
+    return await uploadContent(fileOrUrl, collectionId);
   });
 
   // On OS X it's common to re-create a window in the app when the

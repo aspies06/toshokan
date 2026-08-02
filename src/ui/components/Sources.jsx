@@ -59,7 +59,7 @@ function Sources({ collectionId })
         <>
             <div className="d-flex justify-content-between align-items-baseline mb-2">
                 <h4 className="panel-title fw-semibold lh-base mb-0">Sources</h4>
-                <Upload />
+                <Upload collectionId={collectionId} />
             </div>
             <ListGroup>
                 <ListGroup.Item className="bg-light border-0 fw-semibold">

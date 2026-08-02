@@ -14,5 +14,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // gets full path of file from the file object
     getFilePath: (fileObj) => webUtils.getPathForFile(fileObj),
     // uploads content from a file or remote URL
-    uploadContent: (fileOrUrl) => ipcRenderer.invoke('upload:content', fileOrUrl)
+    uploadContent: (fileOrUrl, collectionId) => ipcRenderer.invoke('upload:content', fileOrUrl, collectionId)
 });
