@@ -67,24 +67,24 @@ function getCollectionById(collectionId) {
     };
 }
 
-/**
- * Adds a source to the collection
- * @param {number} collectionId 
- * @param {object} source
- * @returns {number} - last row inserted
- */
-function addSource(collectionId, source)
-{
-    const query = db.prepare(sql.insertSource);
-    const result = query.run(
-        collectionId, 
-        source.title, 
-        source.author, 
-        source.sourceType, 
-        source.path, 
-        source.isActive ? 1 : 0);
-    return { id: result.lastInsertRowid };
-}
+// /**
+//  * Adds a source to the collection
+//  * @param {number} collectionId 
+//  * @param {object} source
+//  * @returns {number} - last row inserted
+//  */
+// function addSource(collectionId, source)
+// {
+//     const query = db.prepare(sql.insertSource);
+//     const result = query.run(
+//         collectionId, 
+//         source.title, 
+//         source.author, 
+//         source.sourceType, 
+//         source.path, 
+//     );
+//     return { id: result.lastInsertRowid };
+// }
 
 /**
  * Gets all sources for the given collection id.
@@ -101,9 +101,8 @@ function getSources(collectionId) {
         author: source.author,
         sourceType: source.source_type,
         filePath: source.file_path,
-        isActive: Boolean(source.is_active),
         createTime: source.create_time
     }));
 }
 
-export { addCollection, getCollections, getCollectionById, addSource, getSources }
+export { addCollection, getCollections, getCollectionById, getSources }

@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap/Modal';
  * Modal component for uploading files or web resources
  * @returns {JSX.Element} - The upload component
  */
-function Upload() 
+function Upload({collectionId}) 
 {
   const [show, setShow] = useState(false);
   const [source, setSource] = useState(null);
@@ -28,7 +28,7 @@ function Upload()
   const handleUpload = () => {
     console.log('Uploading source:', source);
     if (source) {
-      window.electronAPI.uploadContent(source)
+      window.electronAPI.uploadContent(source, collectionId)
         .then(() => {
           console.log('Upload successful');
           setShow(false);
