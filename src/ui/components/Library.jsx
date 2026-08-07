@@ -7,7 +7,6 @@ import defaultImg from '../assets/collection_mixed.svg';
 
 /**
  * The Library component, which displays a list of collections fetched from the main process.
- * @param {() => void} onCollectionAdded - Callback when new collection is added
  * @returns {JSX.Element} The list of collections or an error message if fetching fails.
  * */
 function Library() 

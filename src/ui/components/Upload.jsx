@@ -2,12 +2,15 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import { toast } from 'react-toastify';
 
 /**
  * Modal component for uploading files or web resources
+ * @param {string} collectionId - The collection ID
+ * @param {Function} onUploadComplete - Callback function to be called when upload is complete
  * @returns {JSX.Element} - The upload component
  */
-function Upload({collectionId}) 
+function Upload({collectionId, onUploadComplete}) 
 {
   const [show, setShow] = useState(false);
   const [source, setSource] = useState(null);
@@ -24,18 +27,33 @@ function Upload({collectionId})
     setSource(file);
   }
 
+  const toastOptions = {
+    autoClose: 5000,
+    hideProgressBar: true,
+    pauseOnHover: true,
+    closeButton: true,
+    theme: 'colored',
+  };
+
   // Handle the upload action
   const handleUpload = () => {
     console.log('Uploading source:', source);
     if (source) {
+      setShow(false);
+      toast.info(
+        `Uploading source "${source}". You will be notified when the upload is complete.`, 
+        toastOptions);
       window.electronAPI.uploadContent(source, collectionId)
         .then(() => {
-          console.log('Upload successful');
-          setShow(false);
-          setSource(null);
+          onUploadComplete();
+          toast.success(`Upload complete for "${source}".`, toastOptions);
         })
         .catch((error) => {
-          console.error('Upload failed:', error);
+          toast.error(`Failed to upload source "${source}".`, toastOptions);
+          console.error('Upload error:', error);
+        })
+        .finally(() => {
+          setSource(null);
         });
     }
   };

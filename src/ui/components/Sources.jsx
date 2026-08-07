@@ -15,17 +15,21 @@ function Sources({ collectionId })
     const [error, setError] = useState(null);
     const selectAllRef = useRef(null);
 
+    const fetchSources = async () => {
+        try {
+            const result = await window.electronAPI.getSources(collectionId);
+            setSources(result);
+            setSelectedIds(new Set(result.map(s => s.id)));
+        }
+        catch (error) {
+            console.error('Error fetching sources:', error);
+            setError(error);
+        }
+    };
+
     useEffect(() => {
-        window.electronAPI.getSources(collectionId)
-            .then((result) => {
-                setSources(result);
-                setSelectedIds(new Set(result.map(s => s.id)));
-            })
-            .catch((error) => {
-                console.error('Error fetching sources:', error);
-                setError(error);
-            });
-    }, []);
+        fetchSources();
+    }, [collectionId]);
 
     const allSelected = sources.length > 0 && selectedIds.size === sources.length;
     const someSelected = selectedIds.size > 0 && !allSelected;
@@ -59,30 +63,38 @@ function Sources({ collectionId })
         <>
             <div className="d-flex justify-content-between align-items-baseline mb-2">
                 <h4 className="panel-title fw-semibold lh-base mb-0">Sources</h4>
-                <Upload collectionId={collectionId} />
+                <Upload collectionId={collectionId} onUploadComplete={fetchSources} />
             </div>
             <ListGroup>
-                <ListGroup.Item className="bg-light border-0 fw-semibold">
-                    <Form.Check
-                        ref={selectAllRef}
-                        type="checkbox"
-                        id="select-all-sources"
-                        label="Select All"
-                        checked={allSelected}
-                        onChange={toggleSelectAll}
-                        disabled={sources.length === 0}
-                    />
-                </ListGroup.Item>
-                {sources.map(source =>
-                    <ListGroup.Item key={source.id}>
+                {sources.length === 0 ? (
+                    <ListGroup.Item className="bg-light border-0 text-center text-muted">
+                        <p className="mb-0">No sources yet — upload files or web pages to get started</p>
+                    </ListGroup.Item>
+                ) : (
+                    <>
+                        <ListGroup.Item className="bg-light border-0 fw-semibold">
                         <Form.Check
-                            type="checkbox"
-                            id={`source-${source.id}`}
-                            label={source.title}
-                            checked={selectedIds.has(source.id)}
-                            onChange={() => toggleSource(source.id)}
+                                ref={selectAllRef}
+                                type="checkbox"
+                                id="select-all-sources"
+                                label="Select All"
+                                checked={allSelected}
+                                onChange={toggleSelectAll}
+                                disabled={sources.length === 0}
                         />
                     </ListGroup.Item>
+                        {sources.map(source => (
+                            <ListGroup.Item key={source.id}>
+                                <Form.Check
+                                    type="checkbox"
+                                    id={`source-${source.id}`}
+                                    label={source.title}
+                                    checked={selectedIds.has(source.id)}
+                                    onChange={() => toggleSource(source.id)}
+                                />
+                            </ListGroup.Item>
+                ))}
+                    </>
                 )}
             </ListGroup>
         </>
