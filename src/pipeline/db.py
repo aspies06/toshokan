@@ -6,10 +6,8 @@ class LibraryDB:
     """
     A class to manage the SQLite database for storing sources, chunks, and embeddings/
     """
-
     def __init__(self, db_path: str):
         self.db_path = db_path
-
 
     def connect(self) -> None:
         """
@@ -21,9 +19,14 @@ class LibraryDB:
         self.conn.enable_load_extension(False)
         self.conn.execute("PRAGMA journal_mode = WAL;")
 
-    def add_source(self, source: Source) -> int:
+    def add_source(self, source: Source, auto_commit: bool = True) -> int:
         """
         Add a source to the database and return the source ID. Raises an exception if the insertion fails.
+        Args:
+            source (Source): The source object to add to the database.
+            auto_commit (bool): Whether to commit the transaction automatically.
+        Returns:
+            int: The ID of the newly added source.
         """
         cur = self.conn.cursor()
         cur.execute("BEGIN")
@@ -35,16 +38,24 @@ class LibraryDB:
             """,
             (source.cid, source.title, source.author, source.source_type, source.file_path, source.file_hash)
         )
-        self.conn.commit()
+        if auto_commit:
+            self.conn.commit()
 
         if cur.lastrowid is None:
             raise Exception("Failed to add source to the database.")
         else:
             return cur.lastrowid
 
-    def add_chunk(self, source_id: int, chunk_id: int, chunk: dict):
+    def add_chunk(self, source_id: int, chunk_id: int, chunk: dict, auto_commit: bool = True) -> int:
         """
         Add a chunk and its embedding to the database. Raises an exception if the insertion fails.
+        Args:
+            source_id (int): The ID of the source document.
+            chunk_id (int): The index of the chunk.
+            chunk (dict): A dictionary containing the chunk's content, token count, and embedding.
+            auto_commit (bool): Whether to commit the transaction automatically.
+        Returns:
+            int: The ID of the newly added chunk.
         """
         cur = self.conn.cursor()
         cur.execute(
@@ -65,12 +76,13 @@ class LibraryDB:
             """,
             (id, chunk["embedding"])
         )
-        self.conn.commit()
+        if auto_commit:
+            self.conn.commit()
 
-        if cur.lastrowid is None:
-            raise Exception("Failed to add source to the database.")
+        if id is None:
+            raise Exception("Failed to add chunk to the database.")
         else:
-            return cur.lastrowid
+            return id
 
     def file_hash_exists(self, file_hash: str) -> bool:
         """

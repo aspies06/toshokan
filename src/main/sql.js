@@ -1,9 +1,15 @@
 /*
  * SQL statements.
  */
-const embeddingDimension = 384;
 
-const ddl =
+/**
+ * Gets the DDL statements for creating the necessary 
+ * tables in the database.
+ * @param {number} vectorDimension - The dimension of the vector embeddings.
+ * @returns {string} - The DDL statements as a string
+ */
+function getTables(vectorDimension) {
+    const ddl =
     `
     PRAGMA foreign_keys = ON;
 
@@ -40,9 +46,11 @@ const ddl =
     -- Vector Table (Using sqlite-vec virtual table for embedding storage & similarity search)
     CREATE VIRTUAL TABLE IF NOT EXISTS vec_chunks USING vec0(
         chunk_id INTEGER PRIMARY KEY,
-        embedding float[${embeddingDimension}]
+        embedding float[${vectorDimension}]
     );
     `
+    return ddl;
+}
 
 const selectCollections = 'SELECT id, name, description, image_url FROM collections ORDER BY update_time DESC';
 const selectCollection = 'SELECT id, name, description, image_url FROM collections WHERE id = ?';
@@ -61,4 +69,4 @@ const selectSources = `SELECT
         ORDER BY create_time DESC
     `
 
-export { ddl, selectCollection, selectCollections, selectSources, insertCollection, insertSource };
+export { getTables, selectCollection, selectCollections, selectSources, insertCollection, insertSource };

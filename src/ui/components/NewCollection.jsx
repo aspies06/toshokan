@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 
 /**
  * Modal component for creating a new collection.
- * @param {() => void} - The callback to invoke on new collection
+ * @param {() => void} onCollectionAdded - The callback to invoke on new collection
  * @returns {JSX.Element} - The rendered NewCollection modal
  */
 function NewCollection({onCollectionAdded}) 

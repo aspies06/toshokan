@@ -35,13 +35,9 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
-
-  // Handle IPC event for adding a collection
+// Registers event handlers
+registerEventHandlers = () => {
+    // Handle IPC event for adding a collection
   ipcMain.handle('add:collection', async (event, collection) => {
     return addCollection(collection.name, collection.description);
   });
@@ -65,6 +61,14 @@ app.whenReady().then(() => {
   ipcMain.handle('upload:content', async (event, fileOrUrl, collectionId) => {
     return await uploadContent(fileOrUrl, collectionId);
   });
+}
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.whenReady().then(() => {
+  createWindow();
+  registerEventHandlers();
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
