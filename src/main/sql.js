@@ -1,5 +1,5 @@
 /*
- * SQL statements.
+ * SQL and DDL statements.
  */
 
 /**

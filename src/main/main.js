@@ -2,10 +2,12 @@ import path from 'node:path';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import started from 'electron-squirrel-startup';
 import { addCollection, getCollectionById, getCollections, getSources } from './db.js';
+import { getSettings, getSettingsSync, saveSettings } from './settings.js';
 import { uploadContent } from './ipc.js';
 
-const initWidth = 1200;
-const initHeight = 800;
+// fallback settings
+const defaultWidth = 1200;
+const defaultHeight = 800;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -13,10 +15,12 @@ if (started) {
 }
 
 const createWindow = () => {
+  const settings = getSettingsSync();
+  const { width, height } = settings.windowDimensions || { width: defaultWidth, height: defaultHeight };
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: initWidth,
-    height: initHeight,
+    width: width,
+    height: height,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -50,6 +54,16 @@ registerEventHandlers = () => {
   // Handle IPC event for fetching individual collection
   ipcMain.handle('get:collection', async (event, collectionId) => {
     return getCollectionById(collectionId);
+  });
+
+  // Handle IPC event for fetching settings
+  ipcMain.handle('get:settings', async () => {
+    return await getSettings();
+  });
+
+  // Handle IPC event for saving settings
+  ipcMain.handle('save:settings', async (event, settings) => {
+    return await saveSettings(settings);
   });
 
   // Handle IPC event for fetching sources (for collection)
