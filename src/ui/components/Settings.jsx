@@ -132,7 +132,6 @@ function Settings() {
                                         value={width}
                                         onChange={(e) => setWidth(e.target.value)} />
                                 </Form.Group>
-
                                 <Form.Group className="flex-grow-1" controlId="height-input">
                                     <Form.Label className="mt-2">Height</Form.Label>
                                     <Form.Control
