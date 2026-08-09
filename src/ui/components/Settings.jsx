@@ -21,7 +21,10 @@ function Settings() {
     const [llmOptions, setLlmOptions] = useState([]);
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = async () => {
+        await loadSettings();
+        setShow(true);
+    };
 
     // Fetch LLM Models (pipeline_tag=text-generation)
     const handleLLMSearch = async (query) => {
@@ -83,23 +86,31 @@ function Settings() {
         });
     };
 
+    // loads the settings from settings.json
+    const loadSettings = async () => {
+        try {
+            const settings = await window.electronAPI.getSettings();
+            populateSettings(settings);
+        } catch (error) {
+            console.error('Error fetching settings:', error);
+        }
+    };
+
     // populate fields from settings
     const populateSettings = (settings) => {
-        setWidth(settings.windowDimensions.width);
-        setHeight(settings.windowDimensions.height);
-        setAccessToken(settings.hf?.accessToken)
+        setWidth(settings.windowDimensions?.width?.toString() || '');
+        setHeight(settings.windowDimensions?.height?.toString() || '');
+        setAccessToken(settings.hf?.accessToken ?? '');
+        
         if (settings.llm?.model) {
             setSelectedLLM([{ id: settings.llm.model, label: settings.llm.model }]);
+        } else {
+            setSelectedLLM([]); // Reset if no model is set
         }
     }
 
     useEffect(() => {
-        // Fetch current settings from the main process
-        window.electronAPI.getSettings().then((settings) => {
-            populateSettings(settings);
-        }).catch((error) => {
-            console.error('Error fetching settings:', error);
-        });
+        loadSettings();
     }, []);
 
     return (
