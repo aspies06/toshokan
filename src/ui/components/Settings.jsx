@@ -101,7 +101,7 @@ function Settings() {
         setWidth(settings.windowDimensions?.width?.toString() || '');
         setHeight(settings.windowDimensions?.height?.toString() || '');
         setAccessToken(settings.hf?.accessToken ?? '');
-        
+
         if (settings.llm?.model) {
             setSelectedLLM([{ id: settings.llm.model, label: settings.llm.model }]);
         } else {
@@ -123,18 +123,25 @@ function Settings() {
                     <Form id="settings-form" onSubmit={handleSubmit}>
                         <Form.Group controlId="window-dimensions" className="mb-3">
                             <h5>Window Dimensions</h5>
-                            <Form.Label className="mt-2">Width</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Enter width in pixels..."
-                                value={width}
-                                onChange={(e) => setWidth(e.target.value)} />
-                            <Form.Label className="mt-2">Height</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Enter height in pixels..."
-                                value={height}
-                                onChange={(e) => setHeight(e.target.value)} />
+                            <div className="d-flex gap-3">
+                                <Form.Group className="flex-grow-1" controlId="width-input">
+                                    <Form.Label className="mt-2">Width</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter width in pixels..."
+                                        value={width}
+                                        onChange={(e) => setWidth(e.target.value)} />
+                                </Form.Group>
+
+                                <Form.Group className="flex-grow-1" controlId="height-input">
+                                    <Form.Label className="mt-2">Height</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter height in pixels..."
+                                        value={height}
+                                        onChange={(e) => setHeight(e.target.value)} />
+                                </Form.Group>
+                            </div>
                         </Form.Group>
                         <Form.Group controlId="hf-model">
                             <h5>Model</h5>
