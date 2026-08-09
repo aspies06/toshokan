@@ -109,10 +109,6 @@ function Settings() {
         }
     }
 
-    useEffect(() => {
-        loadSettings();
-    }, []);
-
     return (
         <>
             <Button variant="light" size="lg" onClick={handleShow}>
