@@ -9,6 +9,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     addCollection: (collection) => ipcRenderer.invoke('add:collection', collection),
     // returns a collection by id
     getCollectionById: (collectionId) => ipcRenderer.invoke('get:collection', collectionId),
+    // returns the current settings
+    getSettings: () => ipcRenderer.invoke('get:settings'),
+    // saves the settings
+    saveSettings: (settings) => ipcRenderer.invoke('save:settings', settings),
     // get the sources for a given collection
     getSources: (collectionId) => ipcRenderer.invoke('get:sources', collectionId),
     // gets full path of file from the file object
