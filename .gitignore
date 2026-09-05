@@ -35,6 +35,13 @@ coverage
 # Bower dependency directory (https://bower.io/)
 bower_components
 
+# Pytest and coverage reports output
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
 # node-waf configuration
 .lock-wscript
 
