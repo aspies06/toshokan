@@ -8,8 +8,10 @@
 # sentence-transformers needs it for the embedding model. Expect a multi-GB
 # install.
 #
-# Install with:
+# Install the production environment with:
 #   python -m pip install -r requirements.txt
+# Or install the development environment with:
+#   python -m pip install -r requirements-dev.txt
 
 # Document conversion (PDF, DOCX, HTML, ...) into a DoclingDocument.
 docling>=2.118,<3
