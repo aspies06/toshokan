@@ -32,3 +32,12 @@ sqlite-vec>=0.1.9,<0.2
 # model downloads work behind the TLS-inspecting proxies common on corporate
 # networks. Optional at runtime; see src/pipeline/runtime.py.
 truststore>=0.10,<0.11
+
+# Chatbot model. Used to generate answers to user questions from the ingested documents.
+ollama>=0.6.0,<0.7.0
+
+# FastAPI framework for building API endpoints.
+fastapi>=0.100.0,<1.0.0
+
+# Uvicorn ASGI server for running the FastAPI application.
+uvicorn>=0.24.0,<1.0.0

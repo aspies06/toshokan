@@ -14,24 +14,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# create an async client that points to the server the Ollama decoder is running on (temporary)
+# create an async client that points to the server the Ollama decoder is running on (currently using llama3.2)
 ollama = AsyncClient(host="http://localhost:11434")
 
 
 @app.post("/chat")
 async def chat(request: dict):
     """
-
     Args:
         request (dict): A dictionary containing messages and who sent them (user or AI)
     Returns:
-        
+        StreamingResponse: A streaming response containing the generated text
     """
     messages = request["messages"]
 
     async def generate():
         """
         Generates a response chunk by chunk based on the user's message
+        Need to add the context of the ingested documents to the messages before sending to the model
         """
         async for chunk in await ollama.chat(
             model="llama3.2",
@@ -51,5 +51,6 @@ async def chat(request: dict):
         },
     )
 
+# Main entry point for the script
 if __name__ == "__main__":
     uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=False)
