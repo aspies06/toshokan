@@ -70,7 +70,6 @@ function Chat({ collectionId })
                     if (payload == '[DONE]') continue;
 
                     const chunkText = JSON.parse(payload);
-                    console.log(chunkText);
                     setMessages(prev => 
                         prev.map(m => 
                             m.id == assistantId ? { ...m, content: m.content + chunkText } : m

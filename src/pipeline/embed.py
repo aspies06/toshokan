@@ -35,4 +35,4 @@ def embed_chunks(doc: DoclingDocument, source_id: int, db: LibraryDB, settings: 
     ]
 
     for i, chunk in enumerate(embedding_chunks):
-        chunk_id = db.add_chunk(source_id, i, chunk, False)  # Do not auto-commit here; commit after adding all chunks
+        db.add_chunk(source_id, i, chunk, False)

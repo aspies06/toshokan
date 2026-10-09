@@ -12,7 +12,7 @@ const defaultSettings = {
     vectorDimensions: 384
   },
   llm: {
-    model: 'google/gemma-4-E4B-it'
+    model: 'llama3.2'
   },
   windowDimensions: {
     width: 1200,
