@@ -53,6 +53,7 @@ const SERVER_PORT = 8000;
  * @returns {PythonShell} serverShell - The PythonShell instance for the running server script.
  */
 async function createServer() {
+  if (serverShell) return serverShell;
   serverShell = await startScript(serverScript,
     ['--port', SERVER_PORT]
   );
