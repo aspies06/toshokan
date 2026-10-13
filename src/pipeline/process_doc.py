@@ -5,7 +5,7 @@ import hashlib
 import uuid
 from pathlib import Path
 from docling.document_converter import DocumentConverter
-from docling_core.types.doc import DoclingDocument
+from docling_core.types.doc.document import DoclingDocument
 from embed import embed_chunks
 from db import LibraryDB
 from source import Source
@@ -19,7 +19,7 @@ def change_extension(file_name: str, new_extension: str) -> str:
     return str(path.with_suffix(new_extension))
 
 # Get the SHA-1 hash of a file and return it as a base64-encoded string.
-def get_file_sha1_base64(file_path: str):
+def get_file_sha1_base64(file_path: Path):
     hasher = hashlib.sha1()
     with open(file_path, 'rb') as f:
         chunk_size = 65536

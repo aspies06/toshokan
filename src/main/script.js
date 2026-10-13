@@ -73,4 +73,34 @@ async function invokeScript(scriptPath, args = [], options = {}) {
     }
 }
 
-export { invokeScript };
+/**
+ * Executes a Python script asynchronously and keeps it running until the process is terminated.
+ * @param {string} scriptPath - Absolute or relative path to the .py file. 
+ * @param {Array<String>} args - Arguments to pass to sys.argv. 
+ * @param {Object} options - Optional configuration overrides.
+ * @returns {PythonShell} The PythonShell instance for the running script.
+ */
+async function startScript(scriptPath, args = [], options = {}) {
+    const absolutePath = path.resolve(scriptPath);
+    const scriptName = path.basename(absolutePath);
+    const scriptFolder = path.dirname(absolutePath);
+    const pythonPath = await detectPythonCommand();  
+    
+    const shell = new PythonShell(scriptName, {
+        mode: 'text',
+        pythonPath,
+        scriptPath: scriptFolder,
+        args: args,
+        pythonOptions: ['-u'], // Unbuffered output
+        ...options
+    });
+
+    shell.on('message', (line) => console.log(`[${scriptName}]`, line));
+    shell.on('stderr', (line) => console.error(`[${scriptName}]`, line));
+    // Without an 'error' listener, a non-zero exit throws an uncaught exception
+    shell.on('error', (err) => console.error(`[${scriptName}] exited with error:`, err));
+
+    return shell;
+}
+
+export { invokeScript, startScript };

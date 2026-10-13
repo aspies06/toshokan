@@ -26,27 +26,63 @@ function Chat({ collectionId })
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         const text = input.trim();
         if (!text || isSending) {
             return;
         }
 
-        const userMessage = { id: Date.now(), role: 'user', content: text };
+        const userMessage = { id: crypto.randomUUID(), role: 'user', content: text };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
-
-        // TODO: replace this with a real call to the LLM backend once it
-        // exists (e.g. window.electronAPI.sendChatMessage(collectionId, text)).
         setIsSending(true);
-        setTimeout(() => {
-            setMessages(prev => [
-                ...prev,
-                { id: Date.now() + 1, role: 'assistant', content: '(LLM response placeholder)' }
-            ]);
+
+        const assistantId = crypto.randomUUID();
+        setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: '' }]);
+        
+        try {
+            const response = await fetch('http://localhost:8000/chat', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({messages: [{role: 'user', content: text }]}),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server responded ${response.status}`);
+            }
+    
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = ''
+    
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+    
+                buffer += decoder.decode(value, { stream: true });
+                const events = buffer.split('\n\n')
+                buffer = events.pop();
+
+                for (const event of events) {
+                    if (!event.startsWith('data: ')) continue;
+                    const payload = event.slice('data: '.length);
+
+                    if (payload == '[DONE]') continue;
+
+                    const chunkText = JSON.parse(payload);
+                    setMessages(prev => 
+                        prev.map(m => 
+                            m.id == assistantId ? { ...m, content: m.content + chunkText } : m
+                        )
+                    );
+                }
+            }
+        } catch (error) {
+            console.log('Error fetching stream:', error);
+        } finally {
             setIsSending(false);
-        }, 500);
-    };
+        }
+};
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {

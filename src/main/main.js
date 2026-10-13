@@ -3,7 +3,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import started from 'electron-squirrel-startup';
 import { addCollection, getCollectionById, getCollections, getSources } from './db.js';
 import { getSettings, getSettingsSync, saveSettings } from './settings.js';
-import { uploadContent } from './ipc.js';
+import { uploadContent, createServer, stopServer } from './ipc.js';
 
 // fallback settings
 const defaultWidth = 1200;
@@ -12,6 +12,11 @@ const defaultHeight = 800;
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
+}
+
+const startServer = async () => {
+  // Start the chat server in a separate process
+  createServer().catch((err) => console.error('Error starting server:', err));
 }
 
 const createWindow = () => {
@@ -40,7 +45,7 @@ const createWindow = () => {
 };
 
 // Registers event handlers
-registerEventHandlers = () => {
+const registerEventHandlers = () => {
     // Handle IPC event for adding a collection
   ipcMain.handle('add:collection', async (event, collection) => {
     return addCollection(collection.name, collection.description);
@@ -83,6 +88,7 @@ registerEventHandlers = () => {
 app.whenReady().then(() => {
   createWindow();
   registerEventHandlers();
+  startServer();
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -101,3 +107,5 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+app.on('will-quit', stopServer);

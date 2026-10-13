@@ -1,7 +1,7 @@
 from __future__ import annotations
 import struct
 from docling_core.transforms.chunker.hybrid_chunker import HybridChunker
-from docling_core.types.doc import DoclingDocument
+from docling_core.types.doc.document import DoclingDocument
 from sentence_transformers import SentenceTransformer
 from db import LibraryDB
 from settings import Settings
@@ -35,4 +35,4 @@ def embed_chunks(doc: DoclingDocument, source_id: int, db: LibraryDB, settings: 
     ]
 
     for i, chunk in enumerate(embedding_chunks):
-        chunk_id = db.add_chunk(source_id, i, chunk, False)  # Do not auto-commit here; commit after adding all chunks
+        db.add_chunk(source_id, i, chunk, False)

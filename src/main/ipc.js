@@ -2,11 +2,13 @@ import path from 'node:path';
 import { promises as fs } from 'node:fs';
 import { BrowserWindow } from 'electron';
 import * as db from './db.js';
-import { invokeScript } from './script.js';
+import { invokeScript, startScript } from './script.js';
+import { getSettings } from './settings.js'
 import { 
   sourcesFolder,
   userDataFolder,
-  processScript, 
+  processScript,
+  serverScript,
   ensureFolderExists
 } from './files.js';
 
@@ -43,4 +45,27 @@ async function uploadContent(fileOrUrl, collectionId) {
   }
 }
 
-export { uploadContent, broadcastToWindow };
+let serverShell = null;
+const SERVER_PORT = 8000; // hard-coded for now, can be made configurable later
+
+/**
+ * Creates a server for the specified model and port
+ * @returns {PythonShell} serverShell - The PythonShell instance for the running server script.
+ */
+async function createServer() {
+  if (serverShell) return serverShell;
+  serverShell = await startScript(serverScript,
+    ['--port', SERVER_PORT]
+  );
+  return serverShell;
+}
+
+/**
+ * Terminates the server when the app exits.
+ */
+function stopServer() {
+  serverShell?.terminate();
+  serverShell = null;
+}
+
+export { uploadContent, createServer, stopServer, broadcastToWindow };

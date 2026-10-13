@@ -8,7 +8,9 @@ const appRoot = app.getAppPath();
 const userDataFolder = path.join(app.getPath('userData'), 'UserData');
 const sourcesFolder = path.join(userDataFolder, 'Sources');
 const scriptsFolder = path.join(appRoot, 'src', 'pipeline');
+const serverFolder = path.join(appRoot, 'src', 'server');
 const processScript = path.join(scriptsFolder, 'process_doc.py');
+const serverScript = path.join(serverFolder, 'server.py');
 const dbFile = path.join(userDataFolder, 'library.db');
 const settingsFile = path.join(userDataFolder, 'settings.json');
 
@@ -74,6 +76,7 @@ export {
     dbFile,
     settingsFile,
     processScript,
+    serverScript,
     ensureFolderExists,
     ensureFolderExistsSync,
     ensureFileExists,
