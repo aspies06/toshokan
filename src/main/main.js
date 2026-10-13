@@ -68,16 +68,8 @@ const registerEventHandlers = () => {
 
   // Handle IPC event for saving settings
   ipcMain.handle('save:settings', async (event, settings) => {
-    const previous = await getSettings();
-    const result = await saveSettings(settings);
-    if (previous.llm?.model !== settings.llm?.model) {
-      await restartServer();
-    }
-    return result;
+    return await saveSettings(settings);
   });
-  // ipcMain.handle('save:settings', async (event, settings) => {
-  //   return await saveSettings(settings);
-  // });
 
   // Handle IPC event for fetching sources (for collection)
   ipcMain.handle('get:sources', async (event, collectionId) => {

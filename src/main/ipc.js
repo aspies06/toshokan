@@ -46,7 +46,7 @@ async function uploadContent(fileOrUrl, collectionId) {
 }
 
 let serverShell = null;
-const SERVER_PORT = 8000;
+const SERVER_PORT = 8000; // hard-coded for now, can be made configurable later
 
 /**
  * Creates a server for the specified model and port
@@ -57,7 +57,6 @@ async function createServer() {
   serverShell = await startScript(serverScript,
     ['--port', SERVER_PORT]
   );
-  serverShell.on('close', () => { serverShell = null; });
   return serverShell;
 }
 
